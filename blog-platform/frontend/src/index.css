@@ -326,7 +326,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .home-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 60px 24px;
+  padding: 20px 24px;
 }
 
 .home-hero {
@@ -355,7 +355,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
-  margin-bottom: 48px;
+  margin-bottom: 25px;
   animation: fadeIn 0.8s ease;
 }
 
@@ -1010,9 +1010,6 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 }
 
 
-  text-align: left;
-  direction: ltr;
-
 /* چینش خودکار متن بر اساس زبان محتوا */
 .post-card-title,
 .post-card-excerpt,
@@ -1125,5 +1122,14 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   }
   .mobile-cards {
     display: flex !important;
+  }
+}
+
+/* Hero responsive */
+@media (max-width: 768px) {
+  .hero-image-container {
+    height: 200px !important;
+    border-radius: 12px !important;
+    margin-bottom: 20px !important;
   }
 }

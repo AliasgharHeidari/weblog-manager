@@ -42,8 +42,9 @@ const PostCard = ({ post }) => {
               <span style={{
                 display: 'inline-block',
                 padding: '8px 16px',
-                background: 'rgba(255, 255, 255, 0.95)',
-                color: 'var(--primary)',
+                background: 'rgba(250, 249, 249, 0.07)',
+                color: 'rgba(240, 242, 245, 0.86)',
+                backdropFilter: 'blur(10px)',
                 borderRadius: '9999px',
                 fontSize: '12px',
                 fontWeight: '700',

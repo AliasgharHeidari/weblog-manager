@@ -46,7 +46,7 @@ const Home = () => {
         height: '300px',
         borderRadius: '20px',
         overflow: 'hidden',
-        marginBottom: '48px',
+        marginBottom: '25px',
         position: 'relative',
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
       }}>
