@@ -21,7 +21,7 @@ func main() {
 
 	sessionStore := session.New(session.Config{
 		CookieHTTPOnly: true,
-		CookieSecure:   false,
+		CookieSecure:   true,
 		CookieSameSite: "Strict", // CSRF protection
 	})
 
