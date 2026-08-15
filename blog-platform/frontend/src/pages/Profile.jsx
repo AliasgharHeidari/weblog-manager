@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -21,12 +21,18 @@ const Profile = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setAvatar(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result);
-      reader.readAsDataURL(file);
+    
+    // چک کردن حجم فایل
+    if (file.size > 10 * 1024 * 1024) {
+      setError('Image size must be less than 10MB');
+      e.target.value = '';
+      return;
     }
+    
+    setAvatar(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setPreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -57,7 +63,11 @@ const Profile = () => {
       
       navigate('/admin');
     } catch (err) {
-      setError(err.response?.data?.error || 'Update failed');
+      if (err.response?.status === 413) {
+        setError('Image is too large. Please choose an image under 10MB.');
+      } else {
+        setError(err.response?.data?.error || 'Update failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -65,12 +75,7 @@ const Profile = () => {
 
   return (
     <div style={{maxWidth: '600px', margin: '0 auto', padding: '48px 24px'}}>
-      <h1 style={{
-        fontSize: '32px',
-        fontWeight: '800',
-        marginBottom: '32px',
-        color: 'var(--text)'
-      }}>
+      <h1 style={{fontSize: '32px', fontWeight: '800', marginBottom: '32px', color: 'var(--text)'}}>
         {t('profile')}
       </h1>
 
@@ -85,18 +90,14 @@ const Profile = () => {
       }}>
         <div style={{textAlign: 'center'}}>
           {preview ? (
-            <img 
-              src={preview} 
-              alt="Avatar" 
-              style={{
-                width: '100px',
-                height: '100px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                margin: '0 auto 16px',
-                border: '3px solid var(--primary)'
-              }}
-            />
+            <img src={preview} alt="Avatar" style={{
+              width: '100px',
+              height: '100px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              margin: '0 auto 16px',
+              border: '3px solid var(--primary)'
+            }} />
           ) : (
             <div style={{
               width: '100px',
@@ -115,62 +116,51 @@ const Profile = () => {
             </div>
           )}
           <label className="btn-secondary" style={{cursor: 'pointer'}}>
-            <Icon name="image" className="w-5 h-5" />
+            <Icon name="image" style={{width: '18px', height: '18px'}} />
             {t('uploadAvatar')}
             <input type="file" accept="image/*" onChange={handleFileChange} style={{display: 'none'}} />
           </label>
+          <p style={{fontSize: '12px', color: 'var(--text-secondary)', marginTop: '8px'}}>
+            Max size: 10MB
+          </p>
         </div>
+
+        {error && (
+          <div style={{
+            padding: '12px 16px',
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid rgba(239,68,68,0.3)',
+            color: '#ef4444',
+            borderRadius: '8px',
+            fontSize: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <Icon name="info" style={{width: '16px', height: '16px', flexShrink: 0}} />
+            {error}
+          </div>
+        )}
 
         <div className="form-group">
           <label className="form-label">Username</label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            className="input-field"
-            required
-          />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="input-field" required />
         </div>
 
         <div className="form-group">
           <label className="form-label">Email</label>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            className="input-field"
-            required
-          />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" required />
         </div>
 
         <div className="form-group">
           <label className="form-label">GitHub URL</label>
-          <input 
-            type="url" 
-            value={githubURL} 
-            onChange={(e) => setGithubURL(e.target.value)} 
-            className="input-field"
-            placeholder="https://github.com/username"
-          />
+          <input type="url" value={githubURL} onChange={(e) => setGithubURL(e.target.value)} className="input-field" placeholder="https://github.com/username" />
         </div>
 
         <div className="form-group">
           <label className="form-label">Bio</label>
-          <textarea 
-            value={bio} 
-            onChange={(e) => setBio(e.target.value)} 
-            className="input-field"
-            rows="3"
-            placeholder="About yourself..."
-          />
+          <textarea value={bio} onChange={(e) => setBio(e.target.value)} className="input-field" rows="3" placeholder="About yourself..." />
         </div>
-
-        {error && (
-          <div className="auth-error">
-            <Icon name="info" className="w-5 h-5" />
-            {error}
-          </div>
-        )}
 
         <button type="submit" disabled={loading} className="btn-primary" style={{justifyContent: 'center'}}>
           {loading ? 'Saving...' : t('save')}

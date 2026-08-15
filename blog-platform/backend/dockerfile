@@ -1,0 +1,24 @@
+FROM golang:1.21-alpine AS builder
+
+WORKDIR /app
+
+ENV GOPROXY=https://goproxy.io,direct
+ENV GOSUMDB=off
+
+COPY go.mod ./
+RUN go mod download
+
+COPY . .
+
+RUN go build -o main .
+
+FROM alpine:latest
+
+WORKDIR /app
+
+COPY --from=builder /app/main .
+COPY --from=builder /app/uploads ./uploads
+
+EXPOSE 8080
+
+CMD ["./main"]

@@ -1,0 +1,9 @@
+docker-compose.yml
+docker-compose.yaml
+.env
+backend/.env
+frontend/.env
+uploads/
+*.log
+node_modules/
+dist/

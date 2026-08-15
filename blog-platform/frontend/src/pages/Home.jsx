@@ -51,7 +51,7 @@ const Home = () => {
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
       }}>
         <img 
-          src="./src/pics/image1.png"
+          src="/images/image1.png"
           alt="Blog Hero"
           style={{
             width: '100%',
